@@ -4,6 +4,13 @@
  */
 package main;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import octree.ColorPixel;
+import octree.Octree;
+
 /**
  *
  * @author alvyn
@@ -13,8 +20,21 @@ public class Controller {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws IOException {
+        File file = new File("test.jpg");
+//        BufferedImage image = ImageIO.read(file);
+//        int rgb = image.getRGB(0, 0);
+//        int red= (rgb & 0x00ff0000) >> 16;
+//        int green= (rgb & 0x0000ff00) >> 8;
+//        int blue= rgb & 0x000000ff;
+//        ColorPixel clrp= new ColorPixel(90,113,157);
+////        int[] clroute=clrp.getRoute();
+////        for(int i=0;i<8;i++){
+////            System.out.print(clroute[i]+" ");
+////        }
+//        int[] test=new int[3];
+        Octree oct = new Octree(file);
+        
     }
     
 }

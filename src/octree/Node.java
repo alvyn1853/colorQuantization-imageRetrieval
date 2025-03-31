@@ -4,16 +4,18 @@
  */
 package octree;
 
+
 /**
  *
  * @author alvyn
  */
 public class Node {
-    //color var
+    boolean hasColor=false;
+    public int r,g,b;
     Node parent;
     Node[] children=new Node[8];
     int level;
-    Node(){
-        
+    public Node(int level){
+        this.level=level;
     }
 }
