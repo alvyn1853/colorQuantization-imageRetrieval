@@ -4,12 +4,9 @@
  */
 package main;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import octree.ColorPixel;
-import octree.Octree;
+import octree.OctreeQuantization;
 
 /**
  *
@@ -33,7 +30,7 @@ public class Controller {
 ////            System.out.print(clroute[i]+" ");
 ////        }
 //        int[] test=new int[3];
-        Octree oct = new Octree(file);
+        OctreeQuantization oct = new OctreeQuantization(file,16);
         
     }
     
