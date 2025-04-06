@@ -4,9 +4,12 @@
  */
 package main;
 
+import colorStrings.ColorStrings;
 import java.io.File;
 import java.io.IOException;
+import modifiedoctree.ModifiedOctreeQuantization;
 import octree.OctreeQuantization;
+import octreeIncremental.OctreeQuantizationI;
 
 /**
  *
@@ -18,20 +21,13 @@ public class Controller {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        File file = new File("test.jpg");
-//        BufferedImage image = ImageIO.read(file);
-//        int rgb = image.getRGB(0, 0);
-//        int red= (rgb & 0x00ff0000) >> 16;
-//        int green= (rgb & 0x0000ff00) >> 8;
-//        int blue= rgb & 0x000000ff;
-//        ColorPixel clrp= new ColorPixel(90,113,157);
-////        int[] clroute=clrp.getRoute();
-////        for(int i=0;i<8;i++){
-////            System.out.print(clroute[i]+" ");
-////        }
-//        int[] test=new int[3];
-        OctreeQuantization oct = new OctreeQuantization(file,16);
-        
+//        OctreeQuantization oct = new OctreeQuantization("test.jpg",16);
+//        ModifiedOctreeQuantization oct = new ModifiedOctreeQuantization("test.jpg",16);
+        OctreeQuantizationI oct = new OctreeQuantizationI("test.jpg",16);
+        ColorStrings csOld = new ColorStrings(oct.getImage(),oct.getPath());
+        System.out.println(csOld.getColorStrings());
+        ColorStrings cs = new ColorStrings(oct.getQuantizedImage(),oct.getPath());
+        System.out.println(cs.getColorStrings());
     }
     
 }

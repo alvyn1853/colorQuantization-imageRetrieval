@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package octree;
+package modifiedoctree;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -17,26 +17,33 @@ import javax.imageio.ImageIO;
  *
  * @author alvyn
  */
-public class OctreeQuantization {
+public class ModifiedOctreeQuantization {
     private Node root;
     private List<Color>pallete;
-    private List<Node> pruneList;
+    //contains node of pruneList<level> used to combine all children to this level
+    private List<Node> pruneList0;
+    private List<Node> pruneList1;
+    private List<Node> pruneList2;
+    private List<Node> pruneList3;
     private int k;//max number of unique colors
     private BufferedImage imgInput;
     private BufferedImage imgOutput;
     private String filepath;
     //constructor
-    public OctreeQuantization(String filepath,int k) throws IOException{
+    public ModifiedOctreeQuantization(String filepath,int k) throws IOException{
         File file = new File(filepath);
         this.filepath=filepath;
         this.imgInput = ImageIO.read(file);//get image file
         int rgb,red,green,blue;//init var
         this.root= new Node(0);//init tree root
-        this.pallete=new ArrayList<>();
-        this.k=k;
+        this.pallete=new ArrayList<>();//color pallete
+        this.k=k;//number of target number
         
-        //list to be pruned (parent of lowest level)
-        this.pruneList=new ArrayList<>();
+        //list to be pruned stores per level to count nodes
+        this.pruneList0=new ArrayList<>();
+        this.pruneList1=new ArrayList<>();
+        this.pruneList2=new ArrayList<>();
+        this.pruneList3=new ArrayList<>();
         
         //loop to add all pixel colors from image to tree
         for(int i=0;i<this.imgInput.getHeight();i++){
@@ -52,13 +59,35 @@ public class OctreeQuantization {
             }    
         }
         
-        //sort the prune list based on level and pixel count in decsending order
-        Collections.sort(this.pruneList);
+        //set color
+        this.setColorPallete();
+        
         this.printPallete("pallete1.png");
         //quantisize color
-        this.quantize();
+        //if node count in level 1>K
+        if(this.pruneList1.size()>this.k){
+            this.quantizeEntireList(pruneList3);
+            this.quantizeEntireList(pruneList2);
+            this.quantizeEntireList(pruneList1);
+            this.quantize(pruneList0); //quantizes nodes at level 1 
+        }
+        //if node count in level 2>K
+        else if(this.pruneList2.size()>this.k){
+            this.quantizeEntireList(pruneList3);
+            this.quantizeEntireList(pruneList2);
+            this.quantize(pruneList1); //quantizes nodes at level 2 
+        }
+        //if node count in level 3>K
+        else if(this.pruneList3.size()>this.k){
+            this.quantizeEntireList(pruneList3);
+            this.quantize(pruneList2); //quantizes nodes at level 3 
+        }
+        //if node count in level 4>K
+        else{
+            this.quantize(pruneList3);
+        }
         this.printPallete("pallete2.png");
-        
+       
         //reconstruct image
         this.imgOutput=new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
         //loop to get colors
@@ -80,7 +109,7 @@ public class OctreeQuantization {
     }
     private void build(Node curr,ColorPixel clr,int lvl){
         //leaf node
-        if(lvl==8){
+        if(lvl==4){
             //if newly created node
             if(curr.leaf==false){
                 //set color and leaf 
@@ -89,7 +118,6 @@ public class OctreeQuantization {
                 curr.b=clr.getB();
                 curr.leaf=true;
                 curr.pixelCount++;
-                this.pallete.add(new Color(curr.r,curr.g,curr.b));
             }
             else{
                 curr.r+=clr.getR();
@@ -105,9 +133,17 @@ public class OctreeQuantization {
             if(curr.children[clr.getRoute()[lvl]]==null){
                 Node n=new Node(lvl+1);
                 n.parent=curr;
-                //if level 7 add to prunelist
-                if(n.getLevel()==7){
-                    this.pruneList.add(n);
+                if(n.getLevel()==0){
+                    this.pruneList0.add(n);
+                }
+                else if(n.getLevel()==1){
+                    this.pruneList1.add(n);
+                }
+                else if(n.getLevel()==2){
+                    this.pruneList2.add(n);
+                }
+                else if(n.getLevel()==3){
+                    this.pruneList3.add(n);
                 }
                 curr.children[clr.getRoute()[lvl]]=n;
                 build(n,clr,lvl+1);
@@ -119,11 +155,34 @@ public class OctreeQuantization {
         }
     }
     
-    public void quantize(){
-        List<Node> tempList=new ArrayList<>();
-        while(this.pallete.size()>this.k){
+    public void setColorPallete(){
+        for(int i=0;i<this.pallete.size();i++){
+            //select predecesor of leaf nodes
+            Node n= this.pruneList3.get(i);
+            Node child;//node to store child
+            
+            
+            for(int j=0;j<8;j++){
+                child=n.children[j];
+                
+                //add rgb value to sum
+                if(child!=null){
+                    //divide r g b values based on pixel count
+                    int rVal=child.r/child.pixelCount;
+                    int gVal=child.g/child.pixelCount;;
+                    int bVal=child.b/child.pixelCount;;
+                    this.pallete.add(new Color(rVal,gVal,bVal));
+                }
+            }
+        }
+    }
+    
+    public void quantizeEntireList(List<Node> pruneList){
+        //sort the prune list based on level and pixel count in decsending order
+        Collections.sort(pruneList);
+        while(!pruneList.isEmpty()){
             //select predecesor of to be pruned nodes
-            Node n= this.pruneList.get(0);
+            Node n= pruneList.get(0);
             //sum r g b values
             Node child;
 
@@ -146,22 +205,45 @@ public class OctreeQuantization {
             //set color and leaf status
             n.leaf=true;
             this.pallete.add(new Color(n.r/n.pixelCount,n.g/n.pixelCount,n.b/n.pixelCount));
-            //add parent of n to new list for next set of prune candidates
-            if(!tempList.contains(n.parent)){
-                tempList.add(n.parent);
-            }
             
             //remove this node from the list
-            this.pruneList.remove(0);
-            //if the list is empty, replace with the templist with the upper level nodes
-            if(this.pruneList.isEmpty()){
-                this.pruneList=new ArrayList<>(tempList);
-                Collections.sort(this.pruneList);
-                tempList.clear();
-            }
+            pruneList.remove(0);
         }
     }
     
+    public void quantize(List<Node> pruneList){
+        //sort the prune list based on level and pixel count in decsending order
+        Collections.sort(pruneList);
+        while(this.pallete.size()>this.k){
+            //select predecesor of to be pruned nodes
+            Node n= pruneList.get(0);
+            //sum r g b values
+            Node child;
+
+            for(int i=0;i<8;i++){
+                child=n.children[i];
+                //add rgb value to sum
+                if(child!=null){
+                    n.r+=child.r;
+                    n.g+=child.g;
+                    n.b+=child.b;
+                    //delete connection to parent
+                    child.parent=null;
+                    //remove color of child from pallete
+                    this.pallete.remove(new Color(child.r/child.pixelCount,child.g/child.pixelCount,child.b/child.pixelCount));
+                }
+                //delete child connections
+                n.children[i]=null;
+            }
+            
+            //set color and leaf status
+            n.leaf=true;
+            this.pallete.add(new Color(n.r/n.pixelCount,n.g/n.pixelCount,n.b/n.pixelCount));
+            
+            //remove this node from the list
+            pruneList.remove(0);
+        }
+    }
     
     
     //method to recreate an image with reduced color pallete

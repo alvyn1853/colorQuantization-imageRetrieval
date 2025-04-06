@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package octree;
+package octreeIncremental;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
  *
  * @author alvyn
  */
-public class OctreeQuantization {
+public class OctreeQuantizationI {
     private Node root;
     private List<Color>pallete;
     private List<Node> pruneList;
@@ -26,7 +26,7 @@ public class OctreeQuantization {
     private BufferedImage imgOutput;
     private String filepath;
     //constructor
-    public OctreeQuantization(String filepath,int k) throws IOException{
+    public OctreeQuantizationI(String filepath,int k) throws IOException{
         File file = new File(filepath);
         this.filepath=filepath;
         this.imgInput = ImageIO.read(file);//get image file
@@ -52,12 +52,8 @@ public class OctreeQuantization {
             }    
         }
         
-        //sort the prune list based on level and pixel count in decsending order
-        Collections.sort(this.pruneList);
-        this.printPallete("pallete1.png");
-        //quantisize color
-        this.quantize();
-        this.printPallete("pallete2.png");
+        
+        this.printPallete("palleteIncremental.png");
         
         //reconstruct image
         this.imgOutput=new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
@@ -90,6 +86,9 @@ public class OctreeQuantization {
                 curr.leaf=true;
                 curr.pixelCount++;
                 this.pallete.add(new Color(curr.r,curr.g,curr.b));
+                if(!this.pruneList.contains(curr.parent)){
+                    this.pruneList.add(curr.parent);
+                }
             }
             else{
                 curr.r+=clr.getR();
@@ -98,6 +97,14 @@ public class OctreeQuantization {
                 curr.pixelCount++;
             }
         }
+        else if(curr.leaf==true){
+            this.pallete.remove(new Color(curr.r/curr.pixelCount,curr.g/curr.pixelCount,curr.b/curr.pixelCount));
+            curr.r+=clr.getR();
+            curr.g+=clr.getG();
+            curr.b+=clr.getB();
+            curr.pixelCount++;
+            this.pallete.add(new Color(curr.r/curr.pixelCount,curr.g/curr.pixelCount,curr.b/curr.pixelCount));
+        }
         //normal nodes
         else{
             curr.pixelCount++;
@@ -105,10 +112,6 @@ public class OctreeQuantization {
             if(curr.children[clr.getRoute()[lvl]]==null){
                 Node n=new Node(lvl+1);
                 n.parent=curr;
-                //if level 7 add to prunelist
-                if(n.getLevel()==7){
-                    this.pruneList.add(n);
-                }
                 curr.children[clr.getRoute()[lvl]]=n;
                 build(n,clr,lvl+1);
             }
@@ -117,11 +120,15 @@ public class OctreeQuantization {
                 build(curr.children[clr.getRoute()[lvl]],clr,lvl+1);
             }
         }
+        if(this.pallete.size()>this.k){
+            this.quantize();
+        }
     }
     
     public void quantize(){
-        List<Node> tempList=new ArrayList<>();
         while(this.pallete.size()>this.k){
+            //sort the prune list based on level and pixel count in decsending order
+            Collections.sort(this.pruneList);
             //select predecesor of to be pruned nodes
             Node n= this.pruneList.get(0);
             //sum r g b values
@@ -147,18 +154,12 @@ public class OctreeQuantization {
             n.leaf=true;
             this.pallete.add(new Color(n.r/n.pixelCount,n.g/n.pixelCount,n.b/n.pixelCount));
             //add parent of n to new list for next set of prune candidates
-            if(!tempList.contains(n.parent)){
-                tempList.add(n.parent);
+            if(!this.pruneList.contains(n.parent)){
+                this.pruneList.add(n.parent);
             }
             
             //remove this node from the list
             this.pruneList.remove(0);
-            //if the list is empty, replace with the templist with the upper level nodes
-            if(this.pruneList.isEmpty()){
-                this.pruneList=new ArrayList<>(tempList);
-                Collections.sort(this.pruneList);
-                tempList.clear();
-            }
         }
     }
     
