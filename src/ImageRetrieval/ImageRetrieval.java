@@ -36,4 +36,8 @@ public class ImageRetrieval {
         }
         Collections.sort(this.results);
     }
+    
+    public List<IndexScore> getRes(){
+        return this.results;
+    }
 }

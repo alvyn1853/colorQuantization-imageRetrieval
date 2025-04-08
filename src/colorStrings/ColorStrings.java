@@ -57,4 +57,8 @@ public class ColorStrings {
     public String getColorStrings(){
         return this.cs;
     }
+    
+    public String getPath(){
+        return this.filepath;
+    }
 }

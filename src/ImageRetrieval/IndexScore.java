@@ -12,15 +12,21 @@ import colorStrings.ColorStrings;
  */
 public class IndexScore implements Comparable<IndexScore>{
     private ColorStrings image;
-    private int score;
+    private double score;
     public IndexScore(ColorStrings cs,int x){
         this.image=cs;
-        this.score=x;
+        this.score=(x*1.0)/(32*32);
     }
     @Override
     public int compareTo(IndexScore i1) {
         //reverse order, for descending sort
         //compare level first
-        return Integer.compare( i1.score,this.score);
+        return Double.compare( i1.score,this.score);
+    }
+    public ColorStrings getImgRep(){
+        return this.image;
+    }
+    public double getScore(){
+        return this.score;
     }
 }
