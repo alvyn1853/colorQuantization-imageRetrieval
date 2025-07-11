@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane id="AnchorPane" prefHeight="608.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.OCQController">
+   <children>
+      <SplitPane dividerPositions="0.5" layoutX="14.0" layoutY="18.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0">
+        <items>
+            <ImageView fx:id="imgIn" fitHeight="256.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+            <ImageView fx:id="imgOut" fitHeight="256.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+        </items>
+      </SplitPane>
+      <Label layoutX="112.0" layoutY="278.0" text="Original Image" />
+      <Label layoutX="376.0" layoutY="278.0" text="Quantized Image" />
+      <SplitPane dividerPositions="0.4999999999999999" layoutX="14.4" layoutY="305.0" prefHeight="202.0" prefWidth="408.0" AnchorPane.leftAnchor="14.4">
+         <items>
+            <ImageView fx:id="palleteIn" fitHeight="256.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+            <ImageView fx:id="palleteOut" fitHeight="256.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+         </items>
+      </SplitPane>
+      <Label layoutX="111.0" layoutY="570.0" text="Original Pallete" />
+      <Label layoutX="379.0" layoutY="570.0" text="Reduced Pallete" />
+      <Pane layoutX="480.0" layoutY="19.0" prefHeight="112.0" prefWidth="320.0" AnchorPane.rightAnchor="18.0">
+         <children>
+            <Label fx:id="lblWarnaAsli" layoutX="14.0" layoutY="14.0" text="Jumlah Warna Asli:" />
+            <Label fx:id="lblWarnaTarget" layoutX="14.0" layoutY="31.0" text="Jumlah Warna Target:" />
+            <Label fx:id="lblWarnaHasil" layoutX="14.0" layoutY="48.0" text="Jumlah Warna Hasil:" />
+            <Label fx:id="lblWktKuantisasi" layoutX="14.0" layoutY="65.0" text="Waktu Proses Kuantisasi: " />
+            <Label fx:id="lblWktString" layoutX="14.0" layoutY="82.0" text="Waktu Proses Stringify: " />
+         </children>
+      </Pane>
+      <Separator layoutX="541.0" orientation="VERTICAL" prefHeight="548.0" prefWidth="4.0" />
+      <TextArea fx:id="colorStringViewer" editable="false" layoutX="488.0" layoutY="177.0" prefHeight="386.0" prefWidth="320.0" wrapText="true" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="btnIR" layoutX="702.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleMoveToIR" text="Image Retrieval" AnchorPane.bottomAnchor="12.000000000000021" />
+      <Button fx:id="btnBack" layoutX="649.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleMoveToMain" text="Back" AnchorPane.bottomAnchor="12.399999999999999" />
+   </children>
+</AnchorPane>

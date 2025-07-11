@@ -1,0 +1,13 @@
+octree\ModifiedOctreeQuantization.class
+main\CBIRController.class
+ocqComponents\ColorPixel.class
+colorStrings\ColorStrings.class
+cbir\IndexScore.class
+octree\OctreeQuantizationIncremental.class
+main\OCQController.class
+octree\OctreeQuantization.class
+ocqComponents\Node.class
+main\WindowUtils.class
+main\MainController.class
+cbir\ImageRetrieval.class
+main\main.class

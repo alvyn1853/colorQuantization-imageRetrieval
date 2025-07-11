@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="354.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MainController">
+   <children>
+       <Label fx:id="title" alignment="TOP_CENTER" prefHeight="281.0" prefWidth="446.0" text="Kuantisasi Warna Octree &amp; Image Retrieval" />
+      <Button fx:id="chooseFileButton" layoutX="167.0" layoutY="82.0" mnemonicParsing="false" onAction="#handleChooseFile" text="Choose Image File" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.39999999999998" />
+      <Button fx:id="startButton" layoutX="167.0" layoutY="226.0" mnemonicParsing="false" onAction="#handleMoveToOCQ" text="Start" AnchorPane.bottomAnchor="30.00000000000003" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.39999999999998" />
+      <Label fx:id="chosenFileLabel" layoutX="56.0" layoutY="56.0" prefHeight="18.0" prefWidth="336.0" text="No File Chosen" textAlignment="CENTER" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="56.0" />
+      <Pane layoutX="71.0" layoutY="137.0" AnchorPane.leftAnchor="71.0" AnchorPane.rightAnchor="71.39999999999998">
+         <children>
+            <RadioButton fx:id="rbtn0" mnemonicParsing="false" onAction="#handleOctreeChoice0" selected="true" text="OCQ">
+               <toggleGroup>
+                  <ToggleGroup fx:id="ocqbtn" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbtn1" layoutX="103.0" mnemonicParsing="false" onAction="#handleOctreeChoice1" text="OCQIncrement" toggleGroup="$ocqbtn" />
+            <RadioButton fx:id="rbtn2" layoutX="248.0" mnemonicParsing="false" onAction="#handleOctreeChoice2" text="MOCQ" toggleGroup="$ocqbtn" />
+         </children>
+      </Pane>
+      <Label layoutX="154.0" layoutY="221.0" prefHeight="18.0" prefWidth="141.0" text="Target Number of Colors:" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="154.0" />
+      <TextField fx:id="numberField" layoutX="154.0" layoutY="255.0" prefHeight="26.0" prefWidth="72.0" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="223.60000000000002" />
+      <CheckBox fx:id="resizeCheck" layoutX="144.0" layoutY="185.0" mnemonicParsing="false" onAction="#handleCheckIR" selected="true" text="Resize for Image Retrieval" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="145.8" />
+      <Button fx:id="btnSet" layoutX="262.0" layoutY="255.0" mnemonicParsing="false" onAction="#handleNumberInput" text="Set" AnchorPane.leftAnchor="261.8" AnchorPane.rightAnchor="154.2" />
+   </children>
+</AnchorPane>
