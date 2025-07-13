@@ -7,10 +7,14 @@ package main;
 import cbir.ImageRetrieval;
 import cbir.IndexScore;
 import colorStrings.ColorStrings;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,16 +81,14 @@ public class CBIRController {
     private void checkAndInit() throws IOException {
         if(this.cscQuery!=null && this.imageQuery!=null){
             //get all color strings from database
-            ArrayList<String> dbFiles=listFilesUsingFilesList("imgdatabase");
-            ColorStrings[] compareImg=new ColorStrings[dbFiles.size()];
-            for(int i=0;i<dbFiles.size();i++){
-                //using image files version
-//                compareImg[i]=new ColorStrings("imgdatabase/"+dbFiles.get(i),"imgdatabase/"+dbFiles.get(i));
-//                compareImg[i].stringify();
 
+            InputStream listStream = getClass().getClassLoader().getResourceAsStream("imgdatabase/list.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(listStream));
+            ColorStrings[] compareImg=new ColorStrings[500];
+            String fileName;
+            for(int i=0;(fileName = reader.readLine()) != null;i++){
                 //using image rep txt version
-                compareImg[i]=new ColorStrings("imgdatabase/"+dbFiles.get(i));
-
+                compareImg[i]=new ColorStrings("imgdatabase/"+fileName);
             }
             
             //set query image
@@ -101,7 +103,15 @@ public class CBIRController {
             ArrayList<ImageView> relImg20= new ArrayList<>();
             for(int i=0;i<20;i++){
                 if(i>=res.size()) break;
-                relImg20.add(i, new ImageView(new Image(new File(res.get(i).getImgRep().getPath()).toURI().toString(),128,128,false,false)));
+//                relImg20.add(i, new ImageView(new Image(new File(res.get(i).getImgRep().getPath()).toURI().toString(),128,128,false,false)));
+                String path = res.get(i).getImgRep().getPath(); // e.g., "imgdatabase/myimg.png"
+                URL imageUrl = getClass().getClassLoader().getResource(path);
+                if (imageUrl != null) {
+                    Image img = new Image(imageUrl.toExternalForm(), 128, 128, false, false);
+                    relImg20.add(i, new ImageView(img));
+                } else {
+                    System.err.println("Image not found: " + path);
+                }
             }
             
             ObservableList<ImageView> contentImgRel = FXCollections.observableArrayList(relImg20);

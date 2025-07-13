@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 /**
@@ -32,7 +34,9 @@ public class ColorStrings {
     //constructor v2 (accepts txt as input)
     public ColorStrings(String file) throws IOException{
         //set attributes
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+//        BufferedReader reader = new BufferedReader(new FileReader(file));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(file);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         this.filepath = reader.readLine();
         this.cs=reader.readLine();
         reader.close();

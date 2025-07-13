@@ -107,7 +107,7 @@ public class OCQController {
                     graphics2D.drawImage(origin, 0, 0, 32, 32, null);
                     graphics2D.dispose();
                     //create file
-                    File resizedImgFile = new File("queryOutput/queryResize.png");
+                    File resizedImgFile = new File("queryResize.png");
                     ImageIO.write(resize, "png", resizedImgFile);
                     this.query=resizedImgFile;
                 }
@@ -123,15 +123,15 @@ public class OCQController {
                 */
                 OctreeQuantization oct = new OctreeQuantization(this.query,this.target);
                 //print pallete
-                clrIn=oct.printPallete("queryOutput/palleteIn.png");
+                clrIn=oct.printPallete("palleteIn.png");
                 //quantisize color
                 oct.quantize();
-                clrOut=oct.printPallete("queryOutput/palleteOut.png");
+                clrOut=oct.printPallete("palleteOut.png");
                 //reconctruct image
                 oct.processOutputImg();
                 endTimeOct = System.nanoTime();//process finishes
                 //print output
-                oct.printCQImg("queryOutput/output.png");
+                oct.printCQImg("output.png");
             }
             else if(this.type==1){
                 /*
@@ -139,13 +139,13 @@ public class OCQController {
                 */
                 OctreeQuantizationIncremental oct = new OctreeQuantizationIncremental(this.query,this.target);
                 //pallete
-                clrIn=oct.printOldPallete("queryOutput/palleteIn.png");
-                clrOut=oct.printPallete("queryOutput/palleteOut.png");
+                clrIn=oct.printOldPallete("palleteIn.png");
+                clrOut=oct.printPallete("palleteOut.png");
                 //reconstruct image
                 oct.processOutputImg();
                 endTimeOct = System.nanoTime();//process finishes
                 //print image
-                oct.printCQImg("queryOutput/output.png");
+                oct.printCQImg("output.png");
             }
             else{
                 /*
@@ -155,31 +155,31 @@ public class OCQController {
                 //set color
                 oct.setColorPallete();
                 //palletr
-                clrIn=oct.printOldPallete("queryOutput/palleteIn.png");
+                clrIn=oct.printOldPallete("palleteIn.png");
                 //quantisize color
                 oct.quantizeM();
                 //pallete
-                clrOut=oct.printPallete("queryOutput/palleteOut.png");
+                clrOut=oct.printPallete("palleteOut.png");
                 //reconstruct image
                 oct.processOutputImg();
                 endTimeOct = System.nanoTime();//process finishes
                 //printfile
-                oct.printCQImg("queryOutput/output.png");
+                oct.printCQImg("output.png");
             }
             //octree color quantization durtaion in ms
             long durationOct = (endTimeOct - startTimeOct)/1000000;
 
             //put images into the stage
             this.imgIn.setImage(new Image(this.query.toURI().toString(),this.imgIn.getFitWidth(),this.imgIn.getFitHeight(),false,false));
-            this.imgOut.setImage(new Image(new File("queryOutput/output.png").toURI().toString(),this.imgOut.getFitWidth(),this.imgOut.getFitHeight(),false,false));
-            this.palleteIn.setImage(new Image(new File("queryOutput/palleteIn.png").toURI().toString(),this.palleteIn.getFitWidth(),this.palleteIn.getFitHeight(),false,false));
-            this.palleteOut.setImage(new Image(new File("queryOutput/palleteOut.png").toURI().toString(),this.palleteOut.getFitWidth(),this.palleteOut.getFitHeight(),false,false));
+            this.imgOut.setImage(new Image(new File("output.png").toURI().toString(),this.imgOut.getFitWidth(),this.imgOut.getFitHeight(),false,false));
+            this.palleteIn.setImage(new Image(new File("palleteIn.png").toURI().toString(),this.palleteIn.getFitWidth(),this.palleteIn.getFitHeight(),false,false));
+            this.palleteOut.setImage(new Image(new File("palleteOut.png").toURI().toString(),this.palleteOut.getFitWidth(),this.palleteOut.getFitHeight(),false,false));
 
             //color strings
             long startTimeCsc = System.nanoTime();//start time csc
             
             //membuat colorstrings menggunakan hasil kuantisasi, filepath menunjuk image asli 
-            this.cs= new ColorStrings("queryOutput/output.png",filepathOfQuery);
+            this.cs= new ColorStrings("output.png",filepathOfQuery);
 
             this.cs.stringify();//create the strings
             long endTimeCsc = System.nanoTime();//end time csc
