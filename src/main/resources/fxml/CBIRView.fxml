@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="467.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.CBIRController">
+<AnchorPane id="AnchorPane" prefHeight="467.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.CBIRController">
    <children>
       <ListView fx:id="listImgRel" layoutX="304.0" layoutY="34.0" prefHeight="372.0" prefWidth="167.0" AnchorPane.rightAnchor="22.0" />
       <ImageView fx:id="imgQuery" fitHeight="128.0" fitWidth="128.0" layoutX="152.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" />

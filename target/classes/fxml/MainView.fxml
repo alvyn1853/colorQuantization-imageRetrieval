@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="354.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MainController">
+<AnchorPane prefHeight="354.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.MainController">
    <children>
        <Label fx:id="title" alignment="TOP_CENTER" prefHeight="281.0" prefWidth="446.0" text="Kuantisasi Warna Octree &amp; Image Retrieval" />
       <Button fx:id="chooseFileButton" layoutX="167.0" layoutY="82.0" mnemonicParsing="false" onAction="#handleChooseFile" text="Choose Image File" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.39999999999998" />
